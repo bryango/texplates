@@ -2,10 +2,10 @@
 
 # build mathjax.html
 tex_cmds=$(cat \
-    LaTeX/basics/macros.tex \
-    LaTeX/basics/mathjax.tex \
+    basics/macros.tex \
+    basics/mathjax.tex \
 ) || exit 1
-output_html=LaTeX/mathjax.html
+output_html=mathjax.html
 
 cat <<- EOF > "$output_html"
 	<!-- mathjax for local use -->
