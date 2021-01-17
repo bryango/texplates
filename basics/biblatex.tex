@@ -21,10 +21,17 @@
 	,sorting=none % 英、中文献排序，对比 ecnyt, cenyt
 %	,block=ragged
 ]{biblatex}
+
 % 按学校要求设定参考文献列表中的条目之内及之间的距离
-\setlength{\bibitemsep}{3bp}
+%\setlength{\bibitemsep}{3bp}
+\setlength{\bibitemsep}{\parskip}
+
 % linespread 值的计算过程可以参考 pkuthss.cls
-\renewcommand*{\bibfont}{\zihao{5}\linespread{1.27}\selectfont}
+%\renewcommand*{\bibfont}{\zihao{5}\linespread{1.27}\selectfont}
+%\renewcommand*{\bibfont}{\linespread{1.12}\selectfont}
+
+% No pagebreak in entry
+\patchcmd{\bibsetup}{\interlinepenalty=5000}{\interlinepenalty=10000}{}{}
 
 \let\simplecite\cite
 \renewcommand{\cite}[1]{\parencite{#1}}
