@@ -33,11 +33,16 @@
 	\usepackage[defaultlines=2,all]{nowidow}
 	\postdisplaypenalty=500
 	\usepackage{enumitem} % incompatible with beamer
-	\setlist{itemsep=0pt,topsep=0pt
-		,labelindent=\parindent
-		,leftmargin=*,itemindent=*
+	\setlist{
+		itemsep=0pt,topsep=0pt
+%		,itemindent=*
 	}
-	\setlist[1]{leftmargin=0pt,listparindent=\parindent}
+	\setlist[1]{
+		labelindent=\parindent
+		,leftmargin=*
+%		,listparindent=\parindent
+%		,leftmargin=0pt
+	}
 	% footnote
 	\geometry{footnotesep=.8\baselineskip} % pre footnote split
 	\setlength{\footnotesep}{2.5\parskip} % post footnote parskip
