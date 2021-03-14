@@ -18,7 +18,9 @@
 	,style=trad-unsrt
 	,citestyle=numeric-comp
 	,backend=biber % caspervector 必须使用 biber 后端
-	,sorting=none % 英、中文献排序，对比 ecnyt, cenyt
+	,sorting=none  % 英、中文献排序，对比 ecnyt, cenyt
+	,maxcitenames=2    % aggressive et al
+%	,uniquelist=false  % enforce et al despite degeneracy
 %	,block=ragged
 ]{biblatex}
 
@@ -35,6 +37,42 @@
 
 \let\simplecite\cite
 \renewcommand{\cite}[1]{\parencite{#1}}
+
+% authoryear style in \textcite
+% ... see <texmf-dist/tex/latex/biblatex/cbx/numeric-comp.cbx>
+% ... and <https://tex.stackexchange.com/a/307392>
+\renewcommand*{\nameyeardelim}{\addspace}
+\renewcommand*{\finalnamedelim}{\addspace\&\space}
+
+\makeatletter
+\renewbibmacro*{textcite}{%
+  \iffieldequals{namehash}{\cbx@lasthash}
+    {\usebibmacro{cite:comp}}
+    {\usebibmacro{cite:dump}%
+     \ifbool{cbx:parens}
+       {\printtext{\bibclosebracket}\global\boolfalse{cbx:parens}}
+       {}%
+     \iffirstcitekey
+       {}
+       {\textcitedelim}%
+     \usebibmacro{cite:init}%
+     \textsl{%
+       \ifnameundef{labelname}
+         {\printfield[citetitle]{labeltitle}}
+         {\printnames{labelname}}
+     }%                                   %%% slanted
+     \setunit*{\addcomma\nameyeardelim}%  %%% add comma
+%     \setunit{\nameyeardelim}%           %%% add space
+     \printfield{year}%                   %%% add year
+     \setunit*{\printdelim{namelabeldelim}}%
+     \printtext{\bibopenbracket}\global\booltrue{cbx:parens}%
+     \ifnumequal{\value{citecount}}{1}
+       {\usebibmacro{prenote}}
+       {}%
+     \usebibmacro{cite:comp}%
+     \stepcounter{textcitecount}%
+     \savefield{namehash}{\cbx@lasthash}}}
+\makeatother
 
 % DOI as hyperlink & titles
 \ExecuteBibliographyOptions{doi=false}
