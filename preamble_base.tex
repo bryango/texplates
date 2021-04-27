@@ -36,15 +36,29 @@
 	% footnote
 	\interfootnotelinepenalty=10000 % forbid footnote spanning pages
 % Chinese
-	\usepackage[UTF8
-		,heading=false
-%		,scheme=plain
-	]{ctex}
-%	\usepackage{indentfirst} % when scheme=plain
-	\newcommand{\textkai}[1]{{\kaishu #1}}
-	\newcommand{\cjkverb}[1]{%
-		\texttt{\xeCJKVerbAddon #1}
-	} % CJK verbatim
+	\ifPDFTeX
+		\usepackage[utf8]{inputenc}
+		\usepackage{CJKutf8}
+		\newcommand{\cjk}[2][gbsn]{%
+			\begin{CJK}{UTF8}{#1}%
+			#2%
+			\end{CJK}%
+		}  % CJK* swallows whitespace between chars
+		\newcommand{\textkai}[1]{\cjk[gkai]{#1}}
+	\else
+		\usepackage[UTF8
+			,heading=false
+%			,scheme=plain
+		]{ctex}
+%		\usepackage{indentfirst} % when scheme=plain
+		\newcommand{\cjk}[2][]{#2}
+		\newcommand{\textkai}[1]{{\kaishu #1}}
+	\fi
+	\ifXeTeX
+		\newcommand{\cjkverb}[1]{%
+			\texttt{\xeCJKVerbAddon #1}
+		} % CJK verbatim
+	\fi
 % Presentation
 	\PassOptionsToPackage{%
 		table,svgnames,dvipsnames
@@ -79,7 +93,7 @@
 	\newcolumntype{~}{>{\global\let\rowstyle\relax}}
 % Math & Fonts
 	\let\latexointop\ointop
-	\usepackage{mathtools,amssymb,bm % basics
+	\usepackage{mathtools,amssymb,latexsym,bm % basics
 		,physics,siunitx,slashed,tensor % physics
 		,simpler-wick,simplewick % wick
 		,esint,nicefrac,extarrows % more symbols
