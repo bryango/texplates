@@ -48,8 +48,11 @@
 	% footnote
 	\geometry{footnotesep=.8\baselineskip}     % pre footnote split
 %	\setlength{\skip\footins}{.8\baselineskip} % pre footnote split, plain TeX
-	\setlength{\footnotesep}{2.5\parskip}      % post footnote parskip
-	\usepackage[bottom,splitrule]{footmisc}
+	\setlength{\footnotesep}{.8\baselineskip}      % post footnote parskip
+	\usepackage[bottom,splitrule,hang]{footmisc}
+	\setlength{\footnotemargin}{1em}
+	\renewcommand{\hangfootparskip}{.2\baselineskip}
+%	\renewcommand{\hangfootparindent}{0em}
 	% justification
 	\usepackage{ragged2e}
 %	\flushbottom
