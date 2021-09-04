@@ -111,6 +111,13 @@
 	%% simple headings style
 	\fancyhead[LO,RE]{\textsl{\textsc{\nouppercase{\leftmark}}}}
 	\fancyhead[RO,LE]{\thepage}
+	\fancypagestyle{headless}{
+		\fancyhead{}
+		\setlength{\headsep}{-.8\baselineskip}
+	}
+	\fancypagestyle{plain}{
+		\fancyhead{}
+	}
 %	%% fancy with logo
 %	\lhead{
 %		\hspace{.2em}
