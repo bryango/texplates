@@ -1,11 +1,13 @@
 #!/bin/bash
 
+output_html=mathjax.html
+output_cwl=texplates.cwl
+
 # build mathjax.html
 tex_cmds=$(cat \
     basics/macros.tex \
     basics/mathjax.tex \
 ) || exit 1
-output_html=mathjax.html
 
 cat <<- EOF > "$output_html"
 	<!-- mathjax for local use -->
@@ -15,9 +17,12 @@ cat <<- EOF > "$output_html"
 	</div>
 EOF
 
-git add --intent-to-add "$output_html"
+# build texplates.cwl
+tex2cwl basics/macros.tex > "$output_cwl"
 
-if ! git diff --exit-code "$output_html"; then
-    git add "$output_html"
+git add --intent-to-add "$output_html" "$output_cwl"
+
+if ! git diff --exit-code "$output_html" "$output_cwl"; then
+    git add "$output_html" "$output_cwl"
     exit 1
 fi

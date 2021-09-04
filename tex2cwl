@@ -1,0 +1,65 @@
+#!/bin/bash
+# generate .cwl completion file for .tex
+
+## <https://github.com/texstudio-org/texstudio/blob/master/src/latexstyleparser.cpp>
+## LatexStyleParser::parseLineCommand
+
+## modified: include [] for optional args
+rxComBrace="\\\\(newcommand|providecommand|DeclareRobustCommand)\\*?\\s*\\{(\\\\\\w+)\\}\\s*\\[?(\\d+)?\\]?(?:\\s*(\\[[^\\]]*\\]))?"
+rxComNoBrace="\\\\(newcommand|providecommand|DeclareRobustCommand)\\*?\\s*(\\\\\\w+)\\s*\\[?(\\d+)?\\]?(?:\\s*(\\[[^\\]]*\\]))?"
+
+function makeArgString {
+    count=$1
+    optional=$2  # print default optional args
+    hint=$3      # print def as placeholder for 1st arg
+
+    args=''
+    [[ -n $optional ]] && args="$optional"
+    [[ "$count" -ge 1 ]] && args="$args{$hint}"
+
+    for ((j=1; j<count; j++)); do
+        args="$args{arg}"
+    done
+
+    echo "$args"
+}
+
+# implement single letter classifier for cwl
+# ... lines ended with `%#x` will result in a `#x` in .cwl
+rxClassifier="(?:%(#[A-Za-z*]))"
+cmds=$(
+    perl -ne "print if s/$rxComBrace(.*?)$rxClassifier?$/\1\t\2\t\3\t\4\t\5\t\6/" < "$1"
+    perl -ne "print if s/$rxComNoBrace(.*?)$rxClassifier?$/\1\t\2\t\3\t\4\t\5\t\6/" < "$1"
+)
+# note: `.*?` for lazy matching
+
+echo "$cmds" \
+| while IFS="" read -r line || [[ -n "$line" ]]; do
+
+    name=$(cut -f2 <<< "$line")
+    if [[ "$name" == *"@"* ]];
+    then :
+    else
+
+        optionCount=$(cut -f3 <<< "$line")
+        optionalArg=$(cut -f4 <<< "$line")
+
+        # sanitize def to be used as hint
+        hint=$(
+            cut -f5 <<< "$line" \
+            | sed -E 's/[\{\}%\\!]+|(#[1-9])+/ /g' \
+            | tr -s ' ' \
+            | sed -e 's/^ *//' -e 's/ *$/../'
+        )
+
+        # extract classifier
+        classifier=$(
+            cut -f6 <<< "$line" \
+            | sed -e 's/^%//'
+        )
+        
+        [[ -n $optionalArg ]] && (( optionCount-- ))
+        echo "$name$(makeArgString "$optionCount" "$optionalArg" "$hint")$classifier"
+
+    fi
+done
