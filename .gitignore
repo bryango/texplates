@@ -2,8 +2,7 @@
 *.pdf
 .fuse_hidden*
 
-# tex
-## Core latex/pdflatex auxiliary files:
+### tex
 *.aux
 *.lof
 *.lot
