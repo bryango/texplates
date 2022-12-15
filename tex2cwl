@@ -5,6 +5,7 @@
 ## LatexStyleParser::parseLineCommand
 
 ## modified: include [] for optional args
+## <https://doc.qt.io/qt-5/qregexp.html>
 rxComBrace="\\\\(newcommand|providecommand|DeclareRobustCommand)\\*?\\s*\\{(\\\\\\w+)\\}\\s*\\[?(\\d+)?\\]?(?:\\s*(\\[[^\\]]*\\]))?"
 rxComNoBrace="\\\\(newcommand|providecommand|DeclareRobustCommand)\\*?\\s*(\\\\\\w+)\\s*\\[?(\\d+)?\\]?(?:\\s*(\\[[^\\]]*\\]))?"
 
