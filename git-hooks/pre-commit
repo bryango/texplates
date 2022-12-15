@@ -1,7 +1,7 @@
 #!/bin/bash
 
-output_html=mathjax.html
-output_cwl=texplates.cwl
+output_html=release/mathjax.html
+output_cwl=release/texplates.cwl
 
 # build mathjax.html
 tex_cmds=$(cat \
@@ -18,7 +18,7 @@ cat <<- EOF > "$output_html"
 EOF
 
 # build texplates.cwl
-tex2cwl basics/macros.tex > "$output_cwl"
+./utils/tex2cwl basics/macros.tex > "$output_cwl"
 
 git add --intent-to-add "$output_html" "$output_cwl"
 
